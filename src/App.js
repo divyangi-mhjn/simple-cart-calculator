@@ -1,10 +1,11 @@
 
 import './App.css';
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect ,lazy,Suspense} from "react";
 import axios from 'axios';
 import { cartReducer } from './reducer/cartReducer';
-import Products from './components/Products';
 import Cart from './components/Cart';
+import ErrorBoundary from './errorBoundary/errorBoundary';
+const Products = lazy(() => import ('./components/Products'));
 
 const App = () => {
 
@@ -23,7 +24,11 @@ const App = () => {
 
   return (
     <div className="App" style={{display:'flex'}}>
+      <ErrorBoundary>
+      <Suspense fallback='<div>Data is loading</div>'>  
       <Products state = {state} dispatch={dispatch}/>
+      </Suspense>
+      </ErrorBoundary>
       <Cart state = {state} dispatch={dispatch}/>
     </div>
   );
